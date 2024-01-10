@@ -9,7 +9,7 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 400,
+      height: MediaQuery.of(context).size.height * .65,
       child: ListView.builder(
         itemCount: transactions.length,
         itemBuilder: (ctx, index) {
@@ -17,7 +17,7 @@ class TransactionList extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 115,
+                  width: MediaQuery.of(context).size.height * .2,
                   padding: const EdgeInsets.all(8),
                   margin: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -27,7 +27,7 @@ class TransactionList extends StatelessWidget {
                     "R\$ ${transactions[index].value.toStringAsFixed(2)}",
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
                     ),
@@ -38,16 +38,17 @@ class TransactionList extends StatelessWidget {
                   children: [
                     Text(
                       transactions[index].title,
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       DateFormat("d MMM y").format(transactions[index].date),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: Theme.of(context).colorScheme.tertiary,
+                        color: Colors.grey,
                       ),
                     ),
                   ],

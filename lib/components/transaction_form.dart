@@ -32,6 +32,34 @@ class _TransactionFormState extends State<TransactionForm> {
       margin: const EdgeInsets.symmetric(),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Add new expanse",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.close,
+                ),
+                style: ButtonStyle(
+                  iconSize: const MaterialStatePropertyAll(18),
+                  backgroundColor: MaterialStatePropertyAll(
+                    Theme.of(context).colorScheme.primary,
+                  ),
+                  foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                ),
+              )
+            ],
+          ),
           TextField(
             autofocus: true,
             controller: titleController,
@@ -51,7 +79,7 @@ class _TransactionFormState extends State<TransactionForm> {
           Container(
             margin: const EdgeInsets.only(top: 10),
             alignment: Alignment.centerRight,
-            child: TextButton(
+            child: FilledButton(
               onPressed: () {
                 _onSubmitForm();
               },

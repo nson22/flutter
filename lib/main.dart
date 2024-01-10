@@ -1,14 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:my_finance/components/transaction_form.dart';
-import 'package:my_finance/components/transaction_list.dart';
-import 'package:my_finance/models/transaction.dart';
+import 'package:my_expanses/components/charter.dart';
+import 'package:my_expanses/components/transaction_form.dart';
+import 'package:my_expanses/components/transaction_list.dart';
+import 'package:my_expanses/models/transaction.dart';
 
-void main() => runApp(const MyFinance());
+void main() => runApp(const MyExpanses());
 
-class MyFinance extends StatelessWidget {
-  const MyFinance({super.key});
+class MyExpanses extends StatelessWidget {
+  const MyExpanses({super.key});
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData();
@@ -18,15 +19,14 @@ class MyFinance extends StatelessWidget {
       theme: theme.copyWith(
         colorScheme: theme.colorScheme.copyWith(
           primary: Colors.purple,
-          secondary: Colors.amber,
-          tertiary: Colors.grey,
+          secondary: Colors.white,
+          tertiary: Colors.amber,
         ),
         textTheme: theme.textTheme.copyWith(
           titleLarge: const TextStyle(
             fontFamily: 'OpenSans',
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
           ),
         ),
         appBarTheme: const AppBarTheme(
@@ -49,30 +49,47 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List _transactions = [
+  final List<Transaction> _transactions = [
     Transaction(
         id: Random().nextDouble().toString(),
         title: 'Playstation 5',
         value: 4999.90,
         date: DateTime.now()),
     Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Xbox Series X',
-        value: 3999.90,
-        date: DateTime.now()),
+      id: Random().nextDouble().toString(),
+      title: 'Xbox Series X',
+      value: 3999.90,
+      date: DateTime.now().subtract(
+        const Duration(days: 1),
+      ),
+    ),
     Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Nintendo Switch',
-        value: 2999.90,
-        date: DateTime.now()),
+      id: Random().nextDouble().toString(),
+      title: 'Nintendo Switch',
+      value: 2999.90,
+      date: DateTime.now().subtract(
+        const Duration(days: 30),
+      ),
+    ),
   ];
+
+  List<Transaction> filterRecentTransactions() {
+    return _transactions.where((tr) {
+      return tr.date.isAfter(
+        DateTime.now().subtract(
+          const Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   void _addTransaction(String title, double value) {
     Transaction transaction = Transaction(
-        id: Random().nextDouble().toString(),
-        title: title,
-        value: value,
-        date: DateTime.now());
+      id: Random().nextDouble().toString(),
+      title: title,
+      value: value,
+      date: DateTime.now(),
+    );
 
     setState(() {
       _transactions.add(transaction);
@@ -83,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
+        shape: const LinearBorder(),
         isDismissible: true,
         context: context,
         builder: (_) {
@@ -96,45 +114,49 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "My Finance",
+          "My expanses",
           style: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
-            fontWeight: FontWeight.bold,
             fontSize: 26,
           ),
         ),
         primary: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: [
-          IconButton(
-            onPressed: () {
-              openTransactionFormModal(context);
-            },
-            icon: const Icon(Icons.add),
-            style: ButtonStyle(
-              foregroundColor: MaterialStatePropertyAll(
-                  Theme.of(context).colorScheme.primary),
-              backgroundColor: MaterialStatePropertyAll(
-                  Theme.of(context).colorScheme.secondary),
-            ),
-          )
-        ],
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Card(
-              color: Theme.of(context).colorScheme.secondary,
-              child: const Text(
-                "Grafico de despesas",
-                textAlign: TextAlign.center,
+      body: _transactions.isEmpty
+          ? SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Click on the + icon and start to add your expanses!",
+                      style: TextStyle(
+                        fontSize: 26,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Charter(filterRecentTransactions()),
+                  TransactionList(filterRecentTransactions())
+                ],
               ),
             ),
-          ),
-          TransactionList(_transactions),
-        ],
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.secondary,
+        child: const Icon(Icons.add),
+        onPressed: () {
+          openTransactionFormModal(context);
+        },
       ),
     );
   }

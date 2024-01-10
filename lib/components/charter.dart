@@ -1,5 +1,3 @@
-import 'dart:developer' as dev;
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_expanses/components/charter_bar.dart';
@@ -27,14 +25,37 @@ class Charter extends StatelessWidget {
         }
       }
 
-      dev.log("${DateFormat.E().format(weekDay)[0]} \t $totalSum");
+      return {"day": DateFormat.E().format(weekDay), "value": totalSum};
+    }).reversed.toList();
+  }
 
-      return {"day": DateFormat.E().format(weekDay)[0], "value": totalSum};
-    }).toList();
+  double get _weekTotalValue {
+    return groupedTransaction.fold(0.0, (sum, tr) {
+      return sum + double.parse(tr['value'].toString());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Text("data");
+    return Card(
+      elevation: 8,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransaction.map((tr) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: CharterBar(
+                label: tr['day'].toString(),
+                value: double.parse(tr['value'].toString()),
+                percentage:
+                    double.parse(tr['value'].toString()) / _weekTotalValue,
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 }

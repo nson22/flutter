@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
-  void openTransactionFormModal(BuildContext context) {
+  void openTransactionFormModal() {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -195,10 +195,8 @@ class _MyHomePageState extends State<MyHomePage> {
         shape: const CircleBorder(),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.secondary,
+        onPressed: openTransactionFormModal,
         child: const Icon(Icons.add),
-        onPressed: () {
-          openTransactionFormModal(context);
-        },
       ),
     );
   }

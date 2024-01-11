@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
@@ -32,8 +31,9 @@ class _TransactionFormState extends State<TransactionForm> {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(int.parse(DateFormat.y().format(DateTime.now()))),
-      lastDate: DateTime(int.parse(DateFormat.y().format(DateTime.now())) + 1),
+      // firstDate: DateTime(int.parse(DateFormat.y().format(DateTime.now()))),
+      firstDate: DateTime.now().subtract(const Duration(days: 7)),
+      lastDate: DateTime.now(),
       initialEntryMode: DatePickerEntryMode.calendarOnly,
     ).then((pickedDate) {
       if (pickedDate == null) {
@@ -42,8 +42,6 @@ class _TransactionFormState extends State<TransactionForm> {
 
       setState(() {
         _selectedDate = pickedDate;
-        log(_selectedDate.toString());
-        log(pickedDate.toString());
       });
     });
   }
@@ -51,9 +49,15 @@ class _TransactionFormState extends State<TransactionForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.only(
+        top: 10,
+        right: 10,
+        left: 10,
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       margin: const EdgeInsets.symmetric(),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

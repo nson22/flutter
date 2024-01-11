@@ -50,92 +50,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Playstation 5',
-        value: 4999.90,
-        date: DateTime.now()),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Xbox Series X',
-      value: 3999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Nintendo Switch',
-      value: 2999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Playstation 5',
-        value: 4999.90,
-        date: DateTime.now()),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Xbox Series X',
-      value: 3999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Nintendo Switch',
-      value: 2999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Playstation 5',
-        value: 4999.90,
-        date: DateTime.now()),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Xbox Series X',
-      value: 3999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Nintendo Switch',
-      value: 2999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Playstation 5',
-        value: 4999.90,
-        date: DateTime.now()),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Xbox Series X',
-      value: 3999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Nintendo Switch',
-      value: 2999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Playstation 5',
-        value: 4999.90,
-        date: DateTime.now()),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Xbox Series X',
-      value: 3999.90,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Nintendo Switch',
-      value: 2999.90,
-      date: DateTime.now(),
-    ),
+    // Transaction(
+    //     id: Random().nextDouble().toString(),
+    //     title: 'Playstation 5',
+    //     value: 4999.90,
+    //     date: DateTime.now()),
+    // Transaction(
+    //   id: Random().nextDouble().toString(),
+    //   title: 'Xbox Series X',
+    //   value: 3999.90,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: Random().nextDouble().toString(),
+    //   title: 'Nintendo Switch',
+    //   value: 2999.90,
+    //   date: DateTime.now(),
+    // ),
   ];
+  bool _showChart = true;
 
   List<Transaction> filterRecentTransactions() {
     return _transactions.where((tr) {
@@ -164,9 +97,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
         shape: const LinearBorder(),
         isDismissible: true,
-        context: context,
         builder: (_) {
           return TransactionForm(_addTransaction);
         });
@@ -174,6 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     PreferredSizeWidget appBar = AppBar(
       centerTitle: true,
       title: Text(
@@ -183,6 +120,26 @@ class _MyHomePageState extends State<MyHomePage> {
           fontSize: 26,
         ),
       ),
+      actions: [
+        isLandscape
+            ? IconButton(
+                onPressed: () {
+                  setState(() {
+                    _showChart = !_showChart;
+                  });
+                },
+                icon: !_showChart
+                    ? const Icon(
+                        color: Colors.white,
+                        Icons.show_chart,
+                      )
+                    : const Icon(
+                        color: Colors.white,
+                        Icons.list,
+                      ),
+              )
+            : const SizedBox(),
+      ],
       primary: true,
       backgroundColor: Theme.of(context).colorScheme.primary,
     );
@@ -214,21 +171,26 @@ class _MyHomePageState extends State<MyHomePage> {
           : SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(
-                    height: availableScreenHeight * .2,
-                    child: Charter(
-                      filterRecentTransactions(),
+                  if (_showChart || !isLandscape)
+                    SizedBox(
+                      height: !isLandscape
+                          ? availableScreenHeight * .2
+                          : availableScreenHeight * .75,
+                      child: Charter(
+                        filterRecentTransactions(),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: availableScreenHeight * .8,
-                    child: TransactionList(
-                      filterRecentTransactions(),
-                    ),
-                  )
+                  if (!_showChart || !isLandscape)
+                    SizedBox(
+                      height: availableScreenHeight * .8,
+                      child: TransactionList(
+                        filterRecentTransactions(),
+                      ),
+                    )
                 ],
               ),
             ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         backgroundColor: Theme.of(context).colorScheme.primary,

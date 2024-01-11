@@ -59,17 +59,81 @@ class _MyHomePageState extends State<MyHomePage> {
       id: Random().nextDouble().toString(),
       title: 'Xbox Series X',
       value: 3999.90,
-      date: DateTime.now().subtract(
-        const Duration(days: 1),
-      ),
+      date: DateTime.now(),
     ),
     Transaction(
       id: Random().nextDouble().toString(),
       title: 'Nintendo Switch',
       value: 2999.90,
-      date: DateTime.now().subtract(
-        const Duration(days: 30),
-      ),
+      date: DateTime.now(),
+    ),
+    Transaction(
+        id: Random().nextDouble().toString(),
+        title: 'Playstation 5',
+        value: 4999.90,
+        date: DateTime.now()),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Xbox Series X',
+      value: 3999.90,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Nintendo Switch',
+      value: 2999.90,
+      date: DateTime.now(),
+    ),
+    Transaction(
+        id: Random().nextDouble().toString(),
+        title: 'Playstation 5',
+        value: 4999.90,
+        date: DateTime.now()),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Xbox Series X',
+      value: 3999.90,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Nintendo Switch',
+      value: 2999.90,
+      date: DateTime.now(),
+    ),
+    Transaction(
+        id: Random().nextDouble().toString(),
+        title: 'Playstation 5',
+        value: 4999.90,
+        date: DateTime.now()),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Xbox Series X',
+      value: 3999.90,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Nintendo Switch',
+      value: 2999.90,
+      date: DateTime.now(),
+    ),
+    Transaction(
+        id: Random().nextDouble().toString(),
+        title: 'Playstation 5',
+        value: 4999.90,
+        date: DateTime.now()),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Xbox Series X',
+      value: 3999.90,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Nintendo Switch',
+      value: 2999.90,
+      date: DateTime.now(),
     ),
   ];
 
@@ -83,12 +147,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addTransaction(String title, double value) {
+  void _addTransaction(String title, double value, DateTime date) {
     Transaction transaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date,
     );
 
     setState(() {
@@ -110,42 +174,58 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "My expanses",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
-            fontSize: 26,
-          ),
+    PreferredSizeWidget appBar = AppBar(
+      centerTitle: true,
+      title: Text(
+        "My expanses",
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
+          fontSize: 26,
         ),
-        primary: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+      primary: true,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+    );
+
+    double notificationBarHeight = MediaQuery.of(context).padding.top;
+    double appBarHeight = appBar.preferredSize.height;
+    double deviceHeight = MediaQuery.of(context).size.height;
+    double availableScreenHeight =
+        deviceHeight - appBarHeight - notificationBarHeight;
+
+    return Scaffold(
+      appBar: appBar,
       body: _transactions.isEmpty
-          ? SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Click on the + icon and start to add your expanses!",
-                      style: TextStyle(
-                        fontSize: 26,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(
+                    "Click on the + icon and start to add your expanses!",
+                    style: TextStyle(
+                      fontSize: 26,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             )
           : SingleChildScrollView(
               child: Column(
                 children: [
-                  Charter(filterRecentTransactions()),
-                  TransactionList(filterRecentTransactions())
+                  SizedBox(
+                    height: availableScreenHeight * .2,
+                    child: Charter(
+                      filterRecentTransactions(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: availableScreenHeight * .8,
+                    child: TransactionList(
+                      filterRecentTransactions(),
+                    ),
+                  )
                 ],
               ),
             ),

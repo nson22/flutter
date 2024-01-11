@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CharterBar extends StatelessWidget {
   final String label;
-  final double value;
+  final String value;
   final double percentage;
 
   const CharterBar({
@@ -18,7 +18,7 @@ class CharterBar extends StatelessWidget {
       children: [
         FittedBox(
           child: Text(
-            value.toStringAsFixed(2),
+            value,
           ),
         ),
         const SizedBox(

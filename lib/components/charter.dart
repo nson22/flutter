@@ -35,6 +35,16 @@ class Charter extends StatelessWidget {
     });
   }
 
+  String _changeValueToDisplay(double value) {
+    if (value > 1000 && value < 1000000) {
+      return "${value.toStringAsFixed(0)}K";
+    } else if (value > 1000000) {
+      return "${value.toStringAsFixed(0)}M";
+    } else {
+      return value.toStringAsFixed(0);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -48,7 +58,8 @@ class Charter extends StatelessWidget {
               fit: FlexFit.tight,
               child: CharterBar(
                 label: tr['day'].toString(),
-                value: double.parse(tr['value'].toString()),
+                value:
+                    _changeValueToDisplay(double.parse(tr['value'].toString())),
                 percentage:
                     double.parse(tr['value'].toString()) / _weekTotalValue,
               ),

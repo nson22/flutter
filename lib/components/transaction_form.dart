@@ -1,7 +1,10 @@
+import 'dart:developer';
+import 'package:intl/intl.dart';
+
 import 'package:flutter/material.dart';
 
 class TransactionForm extends StatefulWidget {
-  final void Function(String, double) _onSubmit;
+  final void Function(String, double, DateTime) _onSubmit;
 
   const TransactionForm(this._onSubmit, {super.key});
 
@@ -10,19 +13,39 @@ class TransactionForm extends StatefulWidget {
 }
 
 class _TransactionFormState extends State<TransactionForm> {
-  final titleController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _valueController = TextEditingController();
+  DateTime? _selectedDate = DateTime.now();
 
-  final valueController = TextEditingController();
+  void _onSubmitForm() {
+    final title = _titleController.text;
+    final value = double.tryParse(_valueController.text) ?? 0.0;
 
-  _onSubmitForm() {
-    final title = titleController.text;
-    final value = double.tryParse(valueController.text) ?? 0.0;
-
-    if (title.isEmpty || value <= 0) {
+    if (title.isEmpty || value <= 0 || _selectedDate == null) {
       return;
     }
 
-    widget._onSubmit(title, value);
+    widget._onSubmit(title, value, _selectedDate!);
+  }
+
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(int.parse(DateFormat.y().format(DateTime.now()))),
+      lastDate: DateTime(int.parse(DateFormat.y().format(DateTime.now())) + 1),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+
+      setState(() {
+        _selectedDate = pickedDate;
+        log(_selectedDate.toString());
+        log(pickedDate.toString());
+      });
+    });
   }
 
   @override
@@ -62,20 +85,44 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
           TextField(
             autofocus: true,
-            controller: titleController,
+            controller: _titleController,
             onSubmitted: (_) => _onSubmitForm(),
             decoration: const InputDecoration(
               labelText: "Enter new expanse",
             ),
           ),
           TextField(
-            controller: valueController,
+            autofocus: true,
+            controller: _valueController,
             onSubmitted: (_) => _onSubmitForm(),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: const InputDecoration(
               labelText: "Enter expanse value (R\$)",
             ),
           ),
+          Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _selectedDate == null
+                        ? "Select the date"
+                        : "Selected date: ${DateFormat('dd/MM/y').format(_selectedDate!)}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: _showDatePicker,
+                    icon: const Icon(
+                      Icons.date_range,
+                      size: 30,
+                      color: Colors.purple,
+                    ),
+                  )
+                ],
+              )),
           Container(
             margin: const EdgeInsets.only(top: 10),
             alignment: Alignment.centerRight,

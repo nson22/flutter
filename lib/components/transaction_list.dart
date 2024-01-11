@@ -56,48 +56,6 @@ class TransactionList extends StatelessWidget {
               ),
             ),
           );
-          //  Card(
-          //   child: Row(
-          //     children: [
-          //       Container(
-          //         width: MediaQuery.of(context).size.height * .15,
-          //         padding: const EdgeInsets.all(8),
-          //         margin: const EdgeInsets.symmetric(
-          //           horizontal: 10,
-          //           vertical: 8,
-          //         ),
-          //         child: Text(
-          // "R\$ ${transactions[index].value.toStringAsFixed(2)}",
-          // style: TextStyle(
-          //   fontSize: 16,
-          //   color: Theme.of(context).colorScheme.primary,
-          //   fontWeight: FontWeight.bold,
-          // ),
-          //         ),
-          //       ),
-          //       Column(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          // Text(
-          //   transactions[index].title,
-          //   style: TextStyle(
-          //     fontSize: 14,
-          //     color: Theme.of(context).colorScheme.primary,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
-          // Text(
-          //   DateFormat("d MMM y").format(transactions[index].date),
-          //   style: const TextStyle(
-          //     fontSize: 12,
-          //     color: Colors.grey,
-          //   ),
-          // ),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // );
         },
       ),
     );
